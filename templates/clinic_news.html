@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Clinic News - Health Services</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #f3e2d9, #fef9f6);
+      color: #333;
+    }
+
+    .container {
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-size: 36px;
+      margin-bottom: 20px;
+      color: #444;
+    }
+
+    .center-icon {
+      font-size: 60px;
+      color: green;
+      margin-bottom: 30px;
+    }
+
+    .grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+    }
+
+    .service {
+      background: #fff;
+      border-radius: 12px;
+      width: 200px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+      text-align: center;
+    }
+
+    .service:hover {
+      transform: scale(1.05);
+    }
+
+    .service img {
+      width: 60px;
+      height: 60px;
+      margin-bottom: 10px;
+    }
+
+    .service i {
+      font-size: 28px;
+      margin-bottom: 10px;
+      color: #d94f4f;
+    }
+
+    .service p {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Types of Health Services</h1>
+    <div class="center-icon">
+      <i class="fas fa-hospital-user"></i>
+    </div>
+    <div class="grid">
+      <a href="/cardiac-care" style="text-decoration:none;">
+      <div class="service">
+        <img src="https://cdn-icons-png.flaticon.com/512/2785/2785819.png" alt="Heart">
+        <i class="fas fa-heartbeat"></i>
+        <p>Cardiac Care</p>
+      </div>
+      </a>
+      <div class="service">
+        <img src="https://cdn-icons-png.flaticon.com/512/4101/4101223.png" alt="Lungs">
+        <i class="fas fa-lungs"></i>
+        <p>Respiratory Services</p>
+      </div>
+      <div class="service">
+        <img src="https://cdn-icons-png.flaticon.com/512/3195/3195523.png" alt="Skin">
+        <i class="fas fa-allergies"></i>
+        <p>Dermatology</p>
+      </div>
+      <div class="service">
+        <img src="https://cdn-icons-png.flaticon.com/512/1828/1828817.png" alt="Plus">
+        <i class="fas fa-plus-square"></i>
+        <p>Emergency Care</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

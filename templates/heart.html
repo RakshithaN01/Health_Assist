@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cardiac Care - Heart Age Detector</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Font Awesome CDN (optional icons) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #fbc2eb, #a6c1ee);
+      margin: 0;
+      padding: 0;
+    }
+
+    .header {
+      text-align: center;
+      padding: 40px 20px 20px;
+      background-color: #fff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      border-radius: 0 0 20px 20px;
+    }
+
+    .header h1 {
+      font-size: 32px;
+      color: #333;
+      margin: 0;
+    }
+
+    .header p {
+      font-size: 18px;
+      color: #555;
+      margin-top: 10px;
+    }
+
+    .detector-container {
+      background: white;
+      padding: 30px;
+      margin: 40px auto;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    input[type="file"] {
+      margin-top: 15px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      background-color: #5e60ce;
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #3c3f99;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>Cardiac Care</h1>
+    <p>Analyze your heartbeat and get your heart age status instantly.</p>
+  </div>
+
+  <div class="detector-container">
+    <h2>Heart Age Detector <i class="fas fa-heartbeat" style="color: crimson;"></i></h2>
+    <p>Select your heartbeat audio file (WAV format)</p>
+    <input type="file" id="audioFile" accept="audio/wav">
+    <button onclick="uploadAudio()">Analyze</button>
+    <div id="result">Waiting for input...</div>
+  </div>
+
+  <script>
+    async function uploadAudio() {
+      const fileInput = document.getElementById("audioFile");
+      const resultDiv = document.getElementById("result");
+
+      if (!fileInput.files.length) {
+        resultDiv.innerText = "Please select an audio file.";
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("audio", fileInput.files[0]);
+
+      resultDiv.innerText = "Processing...";
+
+      try {
+        const response = await fetch("http://localhost:5000/analyze", {
+          method: "POST",
+          body: formData
+        });
+
+        const data = await response.json();
+        resultDiv.innerHTML = `
+          <strong>BPM:</strong> ${data.bpm}<br>
+          <strong>Heart Age Category:</strong> <span style="color:${data.color}; font-weight:bold;">${data.category}</span>
+        `;
+      } catch (error) {
+        resultDiv.innerText = "An error occurred. Please try again.";
+        console.error(error);
+      }
+    }
+  </script>
+</body>
+</html>

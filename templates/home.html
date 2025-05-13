@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HealthCare | Home</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f5f9fc;
+    }
+
+    header {
+      background: #fff;
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: bold;
+      color: #3498db;
+    }
+
+    nav a {
+      margin: 0 15px;
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+    }
+
+    nav a:hover {
+      color: #3498db;
+    }
+
+    .hero {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 60px 80px;
+      background: #eaf7fe;
+    }
+
+    .hero-text {
+      max-width: 50%;
+    }
+
+    .hero-text h1 {
+      font-size: 36px;
+      color: #2c3e50;
+    }
+
+    .hero-text p {
+      font-size: 16px;
+      color: #555;
+      margin: 20px 0;
+    }
+
+    .hero-text button {
+      padding: 12px 24px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .hero-text button:hover {
+      background-color: #2980b9;
+    }
+
+    .hero img {
+      max-width: 400px;
+      border-radius: 10px;
+    }
+
+    .services {
+      display: flex;
+      justify-content: space-around;
+      background-color: #fff;
+      padding: 40px 60px;
+      margin-top: -30px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .service-box {
+      background: #f9fcff;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      width: 200px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .service-box h3 {
+      color: #2c3e50;
+    }
+
+    .service-box p {
+      font-size: 14px;
+      color: #666;
+      margin: 10px 0 15px;
+    }
+
+    .service-box a {
+      text-decoration: none;
+      color: #3498db;
+      font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+      .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 40px 20px;
+      }
+
+      .hero img {
+        margin-top: 20px;
+        width: 90%;
+      }
+
+      .services {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Health<span style="color: #2c3e50;">Care</span></div>
+  <nav>
+    <a href="{{ url_for('home') }}">Home</a>
+    <a href="#">About</a>
+    <a href="#">Services</a>
+    <a href="#">Doctors</a>
+    <a href="#">News</a>
+    <a href="#">Contact</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-text">
+    <h1>Your Trusted Partner in Health & Wellness</h1>
+    <p> We provide seamless access to top-quality doctors, lab tests, health checkups, and medical news - all in one platform.
+    </p>
+    <button onclick="window.location.href='{{ url_for('login') }}'">Explore Services</button>
+  </div>
+  <img src="{{ url_for('static', filename='images/1.jpg') }}" alt="Doctor Image"width="100%">
+</section>
+
+<section class="services">
+  <div class="service-box">
+    <h3>Qualified Doctors</h3>
+    <p>Connect with certified specialists across various departments.</p>
+    <a href="#">Read More</a>
+  </div>
+  <div class="service-box">
+    <h3>Regular Checkup</h3>
+    <p>Book personalized checkups tailored to your health needs.    </p>
+    <a href="#">Read More</a>
+  </div>
+  <div class="service-box">
+    <h3>Lab Test</h3>
+    <p>Get lab tests done at your doorstep or preferred clinic. </p>
+    <a href="#">Read More</a>
+  </div>
+  <div class="service-box">
+    <h3>Clinic News</h3>
+    <p>Read expert tips, health articles, and latest medical updates.</p>
+    <a href="{{ url_for('clinic_news') }}">Read More</a>
+  </div>
+</section>
+
+</body>
+</html>
