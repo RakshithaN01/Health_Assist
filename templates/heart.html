@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>Cardiac Care - Heart Age Detector</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Font Awesome CDN (optional icons) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     body {
@@ -64,10 +63,9 @@
       background-color: #3c3f99;
     }
 
-    #result {
-      margin-top: 20px;
-      font-size: 18px;
-      color: #333;
+    #errorMsg {
+      color: red;
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -80,43 +78,71 @@
 
   <div class="detector-container">
     <h2>Heart Age Detector <i class="fas fa-heartbeat" style="color: crimson;"></i></h2>
+    <!-- Inside .detector-container, above audio upload -->
+     <input type="text" id="name" placeholder="Your Name" required><br><br>
+     <input type="number" id="age" placeholder="Your Age" required><br><br>
+     <select id="gender" required>
+      <option value="">Select Gender</option>
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+      <option value="Other">Other</option>
+    </select><br><br>
+
+<!-- Existing symptoms section (optional display enhancement) -->
+<div id="symptoms">
+  <p><strong>Did you experience any of these symptoms?</strong></p>
+  <label><input type="checkbox" value="Chest pain"> Chest pain</label><br>
+  <label><input type="checkbox" value="Shortness of breath"> Shortness of breath</label><br>
+  <label><input type="checkbox" value="Dizziness"> Dizziness</label><br>
+  <label><input type="checkbox" value="Palpitations"> Palpitations</label>
+</div>
+
     <p>Select your heartbeat audio file (WAV format)</p>
-    <input type="file" id="audioFile" accept="audio/wav">
+    <input type="file" id="audioFile" name="audio" accept="audio/wav">
     <button onclick="uploadAudio()">Analyze</button>
-    <div id="result">Waiting for input...</div>
+    <p id="errorMsg"></p>
   </div>
 
   <script>
-    async function uploadAudio() {
-      const fileInput = document.getElementById("audioFile");
-      const resultDiv = document.getElementById("result");
+    function uploadAudio() {
+    const fileInput = document.getElementById("audioFile");
+    const formData = new FormData();
+    formData.append("audio", fileInput.files[0]);
 
-      if (!fileInput.files.length) {
-        resultDiv.innerText = "Please select an audio file.";
-        return;
-      }
+    // Get additional info
+    formData.append("name", document.getElementById("name").value);
+    formData.append("age", document.getElementById("age").value);
+    formData.append("gender", document.getElementById("gender").value);
 
-      const formData = new FormData();
-      formData.append("audio", fileInput.files[0]);
+    const symptoms = Array.from(document.querySelectorAll('#symptoms input:checked'))
+        .map(cb => cb.value)
+        .join(", ") || "None";
 
-      resultDiv.innerText = "Processing...";
+    formData.append("symptoms", symptoms);
 
-      try {
-        const response = await fetch("http://localhost:5000/analyze", {
-          method: "POST",
-          body: formData
-        });
+    fetch("/analyze", {
+        method: "POST",
+        body: formData,
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            alert("Error: " + data.error);
+            return;
+        }
 
-        const data = await response.json();
-        resultDiv.innerHTML = `
-          <strong>BPM:</strong> ${data.bpm}<br>
-          <strong>Heart Age Category:</strong> <span style="color:${data.color}; font-weight:bold;">${data.category}</span>
-        `;
-      } catch (error) {
-        resultDiv.innerText = "An error occurred. Please try again.";
+        // Redirect to /report with query params
+        const params = new URLSearchParams(data).toString();
+        window.location.href = "/report?" + params;
+    })
+    .catch(error => {
+        alert("Error: Failed to analyze audio.");
         console.error(error);
-      }
-    }
-  </script>
+      });
+}
+</script>
+
 </body>
 </html>
+
+
