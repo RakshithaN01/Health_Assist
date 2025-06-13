@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Heart Report</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f0ff;
+      padding: 40px;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      color: {{ report.color }};
+      text-align: center;
+    }
+
+    .section {
+      margin-bottom: 20px;
+    }
+
+    .section h3 {
+      color: #333;
+    }
+
+    .chart-container {
+      margin: 30px auto;
+      width: 400px;
+      height: 300px;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #5e60ce;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    .button-row {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div id="reportSection" class="container">
+    <h1>Heart Health Report</h1>
+    <div class="section">
+      <h3>Patient Information</h3>
+      <p><strong>Name:</strong> {{ report.name }}</p>
+      <p><strong>Age:</strong> {{ report.age }}</p>
+      <p><strong>Gender:</strong> {{ report.gender }}</p>
+      <p><strong>Symptoms:</strong> {{ report.symptoms}}</p>
+    </div>
+    <div class="section">
+      <h3>Overview</h3>
+      <p><strong>BPM:</strong> {{ report.bpm }}</p>
+      <p><strong>Heart Age Category:</strong> <span style="color: {{ report.color }};"><strong>{{ report.category }}</strong></span></p>
+      <p><strong>Summary:</strong> {{ report.summary }}</p>
+    </div>
+
+    <div class="section">
+      <h3>Details</h3>
+      <p><strong>Rhythm:</strong> {{ report.rhythm }}</p>
+      <p><strong>Notes:</strong> {{ report.notes }}</p>
+    </div>
+
+    <div class="section chart-container">
+      <canvas id="heartChart"></canvas>
+    </div>
+
+    <div class="section">
+      <h3>Recommendations</h3>
+      <ul>
+        {% for tip in report.recommendations %}
+          <li>{{ tip }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="button-row">
+      <a href="{{ url_for('cardiac_care') }}">
+        <button>Go Back</button>
+      </a>
+      <button onclick="downloadPDF()">Download Report</button>
+    </div>
+  </div>
+
+  <script>
+    const bpm = {{ report.bpm }};
+    const ctx = document.getElementById('heartChart').getContext('2d');
+
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Your BPM'],
+        datasets: [{
+          label: 'Heart Rate (BPM)',
+          data: [bpm],
+          backgroundColor: '{{ report.color }}',
+          borderRadius: 8
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            suggestedMax: 120
+          }
+        },
+        plugins: {
+          legend: {
+            display: false
+          }
+        }
+      }
+    });
+    function downloadPDF() {
+  const reportElement = document.getElementById('reportSection');
+
+  const opt = {
+    margin: [0.1, 0.1, 0.1, 0.1],  // top, left, bottom, right in inches
+    filename: 'Heart_Health_Report.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: {
+      scale: 2,
+      scrollY: 0  //  prevents scroll offset from affecting the image crop
+    },
+    jsPDF: {
+      unit: 'in',
+      format: 'a4',  // standard page size
+      orientation: 'portrait'
+    }
+  };
+
+  html2pdf().set(opt).from(reportElement).save();
+}
+  </script>
+</body>
+</html>
+
